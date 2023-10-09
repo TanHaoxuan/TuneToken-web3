@@ -68,3 +68,62 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Import necessary package for Web3
+
+    from [https://github.com/dududududulu/InterfaceDemo/blob/main/instructions/03-React-VSCode.md?plain=1]
+
+  - Go to your app folder and install ```react-app-rewired``` and other missing modules:
+    ```
+    cd project-name
+    npm install --save-dev react-app-rewired crypto-browserify stream-browserify assert stream-http https-browserify os-browserify url buffer process
+    ```
+
+  - Create file ```config-overrides.js``` in the root of your project folder, i.e. ```project-name/config-overrides.js```. Paste the following content into the file:
+    ```javascript
+    const webpack = require("webpack");
+    module.exports = function override(config) {
+        const fallback = config.resolve.fallback || {};
+        Object.assign(fallback, {
+            crypto: require.resolve("crypto-browserify"),
+            stream: require.resolve("stream-browserify"),
+            assert: require.resolve("assert"),
+            http: require.resolve("stream-http"),
+            https: require.resolve("https-browserify"),
+            os: require.resolve("os-browserify"),
+            url: require.resolve("url"),
+        });
+        config.resolve.fallback = fallback;
+        config.plugins = (config.plugins || []).concat([
+            new webpack.ProvidePlugin({
+                process: "process/browser",
+                Buffer: ["buffer", "Buffer"],
+            }),
+        ]);
+        return config;
+    };
+    ```
+    
+  - In the file ```package.json```, change the ```scrpits``` field for start, build and test. 
+    ***before***:
+    ```
+    "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+    }
+    ```
+    ***after***:
+    ```
+    "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+    }
+    ```
+    To this end, missing Nodejs polyfills should be included and your app should be doing well with web3. To see this, add the following command to the first line of ```project-name/src/App.js``` and re-run ```npm start``` in your project folder. You should be able to see your app running instead of errors. 
+    ```javascript
+    import Web3 from "web3";
+    ```
