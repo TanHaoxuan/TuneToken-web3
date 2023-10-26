@@ -1,0 +1,3 @@
+[submodule "thirdparty/tuneToken"]
+	path = thirdparty/tuneToken
+	url = https://github.com/ccxinyuu/tuneToken
