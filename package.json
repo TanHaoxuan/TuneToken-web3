@@ -1,7 +1,7 @@
 {
   "name": "tunetoken",
   "version": "0.1.0",
-  "homepage": "https://dududududulu.github.io/InterfaceDemo",
+  "homepage": "https://tanhaoxuan.github.io/web3_app_testing",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

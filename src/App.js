@@ -77,7 +77,7 @@ export default function App() {
             setBalance(bal);
             setIsConnected(true);
 
-            navigate('/InterfaceDemo/profile');
+            navigate('/web3_app_testing/profile');
         }
         catch (error){
             setIsConnected(false);
@@ -235,10 +235,10 @@ export default function App() {
         // <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path = "/InterfaceDemo" element = {<Login isHaveMetamask = {haveMetamask} connectTo = {connectWallet} />}></Route>
-                    <Route path = "/InterfaceDemo/profile" element = {<ProfileDisplay/>}></Route>
-                    <Route path = "/InterfaceDemo/storage" element = {<StorageDisplay/>}></Route>
-                    <Route path = "/InterfaceDemo/history" element = {<HistoryDisplay/>}></Route>
+                    <Route path = "/web3_app_testing" element = {<Login isHaveMetamask = {haveMetamask} connectTo = {connectWallet} />}></Route>
+                    <Route path = "/web3_app_testing/profile" element = {<ProfileDisplay/>}></Route>
+                    <Route path = "/web3_app_testing/storage" element = {<StorageDisplay/>}></Route>
+                    <Route path = "/web3_app_testing/history" element = {<HistoryDisplay/>}></Route>
                 </Routes>
             </div>
         // </BrowserRouter>
