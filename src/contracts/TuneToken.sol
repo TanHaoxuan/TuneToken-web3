@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
-contract blockstudio {
+contract TuneToken {
+
+
     uint256 audienceIDTracker;
     uint256 artistIDTracker;
     uint256 songIDTracker;
@@ -19,14 +21,13 @@ contract blockstudio {
     }
 
     struct Audience {
-        string name;
-        uint256 audienceID;
-        uint256[] songsPurchased;
-        mapping(uint256 => bool) isSongPurchased;
+        address addr;
+        uint256[] song_list;
+        uint256 balance;
     }
 
     struct Song {
-        string songName;
+        string name;
         string artistName;
         string genre;
         string hash;
