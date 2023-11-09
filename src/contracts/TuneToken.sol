@@ -10,19 +10,23 @@ contract TuneToken {
 
     enum UserType {
         UNDEFINED,
-        ARTIST,
         AUDIENCE
     }
-
-    struct Artist {
-        string name;
-        uint256 artistID;
-        uint256[] songsPublished;
+    
+    enum State {
+        Pending,
+        Delivering,
+        Completed,
+        Cancelled
     }
 
+
     struct Audience {
+        string name;
+        uint256 artistID;
         address addr;
         uint256[] song_list;
+        uint256[] songsPublished;
         uint256 balance;
     }
 
