@@ -1,237 +1,147 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0 <0.9.0;
+
+pragma solidity ^0.8.4;
 
 contract TuneToken {
-
-
-    uint256 audienceIDTracker;
-    uint256 artistIDTracker;
-    uint256 songIDTracker;
-
-    enum UserType {
-        UNDEFINED,
-        AUDIENCE
-    }
     
-    enum State {
-        Pending,
-        Delivering,
-        Completed,
-        Cancelled
-    }
+    mapping(uint256 => address) composer_addr_map;
+    mapping(address => uint256) composer_percent_map;
+    mapping(address => Audience) public audience_map;
+    mapping(uint256 => Song) public song_map;
+    uint256 public purchase_list_length;
+    mapping(uint256 => Purchase) public purchase_map;
+    mapping(address => bool) public chkexistAudience_map;
 
+    enum Purchase_Status {Cancelled, Waiting, Pending, Done}
 
-    struct Audience {
-        string name;
-        uint256 artistID;
-        address addr;
-        uint256[] song_list;
-        uint256[] songsPublished;
-        uint256 balance;
-    }
-
+    
     struct Song {
+        uint256 id;
         string name;
-        string artistName;
-        string genre;
-        string hash;
-        uint256 songID;
         uint256 price;
-        address payable artistAddress;
+        uint256[] composer_addr_map;
+        uint256[] composer_percent_map;
+    }
+    struct Audience {
+        address addre;
+        uint256 balance;        
+        uint256[] purchase_map;
+    }
+    struct Purchase {
+        uint256 id;
+        address audi;
+        string composer_addre;
+        string zip;
+        uint256[] products_id;
+        uint256 total_price;
+        Purchase_Status state;
     }
 
-    mapping(address => UserType) identifyUser;
-    mapping(address => Artist) allArtists;
-    mapping(address => Audience) allAudience;
-    mapping(uint256 => Song) allSongs;
-    mapping(uint256 => uint256) timesSongPurchased;
-    mapping(string => bool) songHashUsed;
-    mapping(string => address payable) getArtistAddress;
 
-    constructor() {
-        audienceIDTracker = 0;
-        artistIDTracker = 0;
-        songIDTracker = 0;
+    constructor() payable {
+
     }
 
-    function getNumSongs() public view returns (uint256) {
-        return songIDTracker;
+
+    // user
+    function registerAudience(address _address) public returns (bool) {
+        // not the current user -> update the status & record address
+        if (_address!=address(0) && !chkexistAudience_map[_address]) {
+            chkexistAudience_map[_address] = true;
+            audience_map[_address].addre = _address;
+            return true;
+        }
+        return false;
     }
 
-    function checkUser() public view returns (UserType) {
-        return identifyUser[msg.sender];
+    function getAudience(address _addr) public view returns (bool _isCurrCust){
+        return chkexistAudience_map[_addr]; //check if registed
     }
 
-    function addNewArtist(string memory _name) public {
-        artistIDTracker += 1;
+//order info
 
-        Artist memory newArtist;
-        newArtist.name = _name;
-        newArtist.artistID = artistIDTracker;
-        getArtistAddress[_name] = payable(msg.sender);
-
-        allArtists[msg.sender] = newArtist;
-        identifyUser[msg.sender] = UserType.ARTIST;
-    }
-
-    function addNewAudience(string memory _name) public {
-        audienceIDTracker += 1;
-
-        Audience storage newAudience = allAudience[msg.sender];
-        newAudience.name = _name;
-        newAudience.audienceID = audienceIDTracker;
-
-        identifyUser[msg.sender] = UserType.AUDIENCE;
-    }
-
-    function getAudienceDetails()
-        public
-        view
-        returns (
-            string memory,
-            uint256,
-            uint256[] memory
+    function getPurchase(uint256 id) public view returns (
+            string memory _composer_addre,
+            string memory _zip,
+            uint256[] memory _products_ids,
+            uint256 _total_price,
+            Purchase_Status _state,
+            uint256 _id
         )
     {
+        Purchase memory pur = purchase_map[id];
         return (
-            allAudience[msg.sender].name,
-            allAudience[msg.sender].audienceID,
-            allAudience[msg.sender].songsPurchased
+            pur.composer_addre,
+            pur.zip,
+            pur.products_id,
+            pur.total_price,
+            pur.state,
+            pur.id
         );
     }
 
-    function getArtistDetails()
-        public
-        view
-        returns (
-            string memory,
-            uint256,
-            uint256[] memory
-        )
-    {
-        return (
-            allArtists[msg.sender].name,
-            allArtists[msg.sender].artistID,
-            allArtists[msg.sender].songsPublished
-        );
+    function getPurchaseMap() public view returns (uint256[] memory cus_orders) {
+        return audience_map[msg.sender].purchase_map; // puchase list of current user
     }
 
-    event songAdded(
-        uint256 songID,
-        string songName,
-        string artistName,
-        uint256 price
-    );
+    //purchase status
+    function purchaseDone(uint256 id) public {
+        purchase_map[id].state = Purchase_Status.Done;
+    }
 
-    function addSong(
-        string memory _name,
-        string memory _genre,
-        string memory _hash,
-        uint256 _price
-    ) public {
-        require(identifyUser[msg.sender] == UserType.ARTIST, "Not an artist.");
+    function purchasePending(uint256 id) public {
+        purchase_map[id].state = Purchase_Status.Pending;
+    }
+
+    function purchaseCancel(uint256 id) public {
+        purchase_map[id].state = Purchase_Status.Cancelled;
+        audience_map[purchase_map[id].audi].balance += purchase_map[id].total_price;
+    }
+
+    //purchase
+    function checkoutList(
+        string calldata _composer_addre,
+        string calldata _zip,
+        uint256[] memory _product_ids
+    ) public payable returns (uint256 id) {
+        //auto register
+        if (chkexistAudience_map[msg.sender] == false) {
+            registerAudience(msg.sender);
+        }
+        audience_map[msg.sender].balance += msg.value;
+
+        uint256 _total_price;
+
+        //add up total price
+        for (uint256 i = 0; i < _product_ids.length; i++) {
+            _total_price += song_map[_product_ids[i]].price;
+        }
+        //chcek total amount
         require(
-            !songHashUsed[_hash],
-            "Duplicate detected. Song hash already in use."
+            audience_map[msg.sender].balance >= _total_price,
+            "Please add money"
         );
 
-        songIDTracker += 1;
+        // instance
+        Purchase memory pur;
+        pur.audi = msg.sender;
+        pur.id = purchase_list_length;
+        pur.composer_addre = _composer_addre;
+        pur.zip = _zip;
+        pur.products_id = _product_ids;
+        pur.total_price = _total_price;
+        pur.state = Purchase_Status.Waiting;
 
-        Song memory newSong;
-        newSong.songID = songIDTracker;
-        newSong.songName = _name;
-        newSong.artistName = allArtists[msg.sender].name;
-        newSong.genre = _genre;
-        newSong.hash = _hash;
-        newSong.price = _price;
-        newSong.artistAddress = payable(msg.sender);
+        // record the puchase in personal info
+        purchase_map[purchase_list_length] = pur;
+        purchase_list_length += 1;
+        audience_map[msg.sender].purchase_map.push(purchase_list_length - 1);
 
-        timesSongPurchased[songIDTracker] = 0;
-
-        allSongs[songIDTracker] = newSong;
-        allArtists[msg.sender].songsPublished.push(songIDTracker);
-        songHashUsed[_hash] = true;
-
-        emit songAdded(
-            newSong.songID,
-            newSong.songName,
-            newSong.artistName,
-            newSong.price
-        );
+        //deduct price
+        audience_map[msg.sender].balance -= _total_price;
+        
+        return purchase_list_length - 1;
     }
 
-    event songPurchased(
-        uint256 songID,
-        string songName,
-        string audienceName,
-        uint256 price
-    );
 
-    function buySong(uint256 _songID) public payable {
-        require(
-            identifyUser[msg.sender] == UserType.AUDIENCE,
-            "Not an audience member."
-        );
-        require(
-            !allAudience[msg.sender].isSongPurchased[_songID],
-            "Cannot buy the song twice."
-        );
-
-        Song memory curSong = allSongs[_songID];
-
-        require(
-            msg.value == (curSong.price * 1 wei),
-            "Amount payed does not match price of the song."
-        );
-        require(msg.sender.balance > msg.value, "Insufficient balance.");
-
-        curSong.artistAddress.transfer(msg.value);
-        timesSongPurchased[_songID] += 1;
-
-        allAudience[msg.sender].songsPurchased.push(_songID);
-        allAudience[msg.sender].isSongPurchased[_songID] = true;
-
-        emit songPurchased(
-            curSong.songID,
-            curSong.songName,
-            allAudience[msg.sender].name,
-            msg.value
-        );
-    }
-
-    event artistDonated(string artistName, string audienceName, uint256 amount);
-
-    function donateArtist(string memory artistName) public payable {
-        require(
-            identifyUser[msg.sender] == UserType.AUDIENCE,
-            "Not an audience member."
-        );
-        require(msg.sender.balance > msg.value, "Insufficient balance.");
-
-        getArtistAddress[artistName].transfer(msg.value);
-
-        emit artistDonated(artistName, allAudience[msg.sender].name, msg.value);
-    }
-
-    function getSongDetails(uint256 _songID)
-        public
-        view
-        returns (
-            string memory,
-            string memory,
-            string memory,
-            string memory,
-            uint256,
-            uint256
-        )
-    {
-        return (
-            allSongs[_songID].songName,
-            allSongs[_songID].artistName,
-            allSongs[_songID].genre,
-            allSongs[_songID].hash,
-            allSongs[_songID].price,
-            timesSongPurchased[_songID]
-        );
-    }
 }

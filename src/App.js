@@ -1,53 +1,71 @@
-import {Routes, Route} from "react-router-dom";
-import {useNavigate} from "react-router-dom";
-import {useState} from 'react';
-import {ethers} from 'ethers';
-import Web3 from "web3";
+import React, { Component } from "react";
+import Home from './pages/page1_music_player.js'
+import Page2_songs from './pages/page2_songs.js'
+import Error from './pages/error.js'
+import Page3_wishlist from './pages/page3_wishlist.js'
+import { HashRouter, NavLink, Routes, Route } from 'react-router-dom';
+import NavigationBar from "./components/navigationbar.js";
+import { useState } from 'react';
+import preset_songs from './components/songs_preset.json'
+import Checkout from './pages/Checkout.js'
+import { useNavigate } from "react-router-dom";
+import { ethers } from 'ethers';
+import Page4_record from "./pages/page4_record.js";
+import Credits from "./pages/credits.js";
+import Web3 from 'web3';
+import { CONTRACT_NAME_ADDRESS, CONTRACT_NAME_ABI } from "./contracts/config.js";
+import { useEffect } from "react";
+import { SettingsBackupRestoreRounded } from "@mui/icons-material";
 
-import './App.css';
-import Login from "./components/login/login";
-import Profile from "./components/profile/profile";
-import Storage from "./components/storage/storage";
-import History from "./components/history/history";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contracts/config";
+
+// checkout page using https://github.com/mui/material-ui/tree/
 
 export default function App() {
+    const [items, setPurchaseItems] = useState({});
+    const [cart_count, setPurchaseCount] = useState(0);
+    const [searchedDish, setSearchedDish] = useState(null);
+    const [searchedMerchant, setSearchedMerchant] = useState(null);
     const [haveMetamask, setHaveMetamask] = useState(true);     // check if the browser has MetaMask installed. 
     const [address, setAddress] = useState(null);               // address of connected MetaMask account. 
     const [network, setNetwork] = useState(null);               // network the account is using. 
     const [balance, setBalance] = useState(0);                  // balance of connected MetaMask account. 
     const [isConnected, setIsConnected] = useState(false);      // check if is connected to MetaMask account. 
+    const [pastOrders, setDonePurchase] = useState([]);           // list of past orders.
+    const [currentOrders, setPendingPurchase] = useState([]);     // list of current orders.
+    const [pendingOrders, setWaitingPurchase] = useState([]);     // list of pending orders.
 
-    const [storedPending, setStoredPending] = useState(false);        // check if a value is pending. 
-    const [storedDone, setStoredDone] = useState(false);        // check if a value is stored. 
-    const [storedVal, setStoredVal] = useState(0);              // value that is stored right now. 
-    const [showVal, setShowVal] = useState(0);                  // value that is showed on screen. 
-
-    const [historyRecord, setHistoryRecord] = useState(null);   // record of history operations. 
-    const [recordLen, setRecordLen] = useState(0);              // length of record. 
-    const maxRecordLen = 50;                                    // maximum length of record list. 
-
-    const navigate = useNavigate();
-    const {ethereum} = window;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const { ethereum } = window;
     const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
-    const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+    const contract = new web3.eth.Contract(CONTRACT_NAME_ABI, CONTRACT_NAME_ADDRESS);
 
-    // useEffect(() => {
-    //     const { ethereum } = window;
-    //     const checkMetamaskAvailability = async () => {
-    //         if (!ethereum) {
-    //             setHaveMetamask(false);
-    //         }
-    //         setHaveMetamask(true);
-    //     };
-    //     checkMetamaskAvailability();
-    // }, []);
+    const pushItem = (item_name) => {
+        var new_item = items;
+        if (Object.keys(items).includes(item_name)) {
+            new_item[item_name] += 1;
+        } else {
+            new_item[item_name] = 1;
+        }
+        setPurchaseItems(new_item);
+        setPurchaseCount(cart_count + 1);
+    }
 
-////// connect to MetaMask. 
-    const connectWallet = async () => {         // function that connect to METAMASK account, activated when clicking on 'connect'. 
+    const popItem = (item_name) => {
+        var new_item = items;
+        if (new_item[item_name] == 1) {
+            delete new_item[item_name];
+            setPurchaseItems(new_item);
+            setPurchaseCount(cart_count - 1);
+        } else if (new_item[item_name] > 0) {
+            new_item[item_name] -= 1;
+            setPurchaseItems(new_item);
+            setPurchaseCount(cart_count - 1);
+        }
+    }
+
+    const connectWallet = async () => { 
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
         try {
-            if (!ethereum){
+            if (!ethereum) {
                 setHaveMetamask(false);
             }
             const accounts = await ethereum.request({
@@ -61,14 +79,8 @@ export default function App() {
             let bal = ethers.utils.formatEther(balanceVal);
 
             console.log(chainId);
-            if (chainId === '0x3'){
+            if (chainId === '0x3') {
                 setNetwork('Ropsten Test Network');
-            }
-            else if (chainId === '0x5'){
-                setNetwork('Goerli Test Network');
-            }
-            else if (chainId === '0xaa36a7'){
-                setNetwork('Sepolia Test Network');
             }
             else {
                 setNetwork('Other Test Network');
@@ -76,172 +88,72 @@ export default function App() {
             setAddress(accounts[0]);
             setBalance(bal);
             setIsConnected(true);
-
-            navigate('/web3_app_testing/profile');
         }
-        catch (error){
+        catch (error) {
             setIsConnected(false);
         }
     }
 
+//backend connection
+    const registerAudience = async () => {
+        const is_existing_customer = await contract.methods.getAudience(address).call();
+        if (!is_existing_customer) {
+            const res = await contract.methods.registerAudience(address).send({ from: address });
+        }
+    }
 
-////// Contract Deployment. 
-    // IMPORTANT: async / await is essential to get values instead of Promise. 
-    const storeData = async (inputVal) => {
-        const res = await contract.methods.set(inputVal).send({from: address});
+    const checkoutList = async (delivery_addr, zip, item_ids, total_price) => {
+        const res = await contract.methods.checkoutList(delivery_addr, zip, item_ids).send({ from: address, value: total_price });
         return res;
     }
 
-    const getData = async () => {
-        const res = await contract.methods.get().call();
-        return res;
-    }
+    const updateOrderStatus = async () => {
+        setWaitingPurchase([]);
+        setPendingPurchase([]);
+        setDonePurchase([]);
 
-
-////// history recording. 
-    const RecordOverFlow = () => {
-        if (recordLen > maxRecordLen){
-            let outlierNum = recordLen - maxRecordLen;
-            setHistoryRecord(current => current.splice(1, outlierNum));
-            setRecordLen(maxRecordLen);
-        }
-    }
-
-    const RecordPush = (opr, val, detail) => {
-        let stat = 1;
-        let cost = 0;
-        if (val.length === 0){
-            val = 'NA';
-            cost = 'NA';
-            stat = 0;
-        }
-        else{
-            if (opr === 'get'){
-                cost = 0;
-                stat = 1;
+        const res = await contract.methods.getPurchaseMap().call({ from: address });
+        for (var i = 0; i < res.length; i++) {
+            const res1 = await contract.methods.getPurchase(res[i]).call({ from: address });
+            if (res1[4] === '0') {
+                setWaitingPurchase(prev => [...prev, res1]);
             }
-            else{
-                if (detail === 'null'){
-                    setStoredPending(false);
-                    setStoredDone(true);
-                    console.log('Rejected');
-                    cost = 'NA';
-                    stat = 2;
-                }
-                else{
-                    setStoredDone(true);
-                    console.log('Done');
-                    console.log(detail);    // show the details of transaction. 
-                    cost = detail.gasUsed;
-                    stat = 1;
-                }
+            else if (res1[4] === '1') {
+                setPendingPurchase(prev => [...prev, res1]);
             }
-        }
-
-        const newRecord = {
-            id: recordLen + 1, 
-            address: address, 
-            operation: opr, 
-            value: val, 
-            cost: cost, 
-            status: stat
-        };
-        if (recordLen === 0){
-            setHistoryRecord([newRecord, newRecord]);
-        }
-        else{
-            setHistoryRecord(current => [...current, newRecord]);
-        }
-        setRecordLen(recordLen + 1);
-
-        if (recordLen > maxRecordLen){
-            RecordOverFlow();
-        }
-    }
-
-
-////// store and get value. 
-    const storedValUpdate = async () => {
-        const inputVal = document.getElementById('inputVal').value;
-        setStoredPending(false);
-        setStoredDone(false);
-
-        if (inputVal.length === 0) {
-            const detail = 'null';
-            RecordPush('store', inputVal, detail);
-        }
-        else {
-            setStoredPending(true);
-            setStoredVal(inputVal);
-            
-            try{
-                const detail = await storeData(inputVal);   // contract deployed. 
-                RecordPush('store', inputVal, detail);      // recorded. 
-            }
-            catch(err){
-                const detail = 'null';                      // no detail info. 
-                RecordPush('store', inputVal, detail);      // recorded. 
+            else if (res1[4] === '2') {
+                setDonePurchase(prev => [...prev, res1]);
             }
         }
     }
 
-    const showValUpdate = async () => {
-        const ans = await getData();
-        setStoredPending(false);
-        setStoredDone(false);
-
-        setShowVal(ans);
-        RecordPush('get', ans);
+    const acceptPurchase = async (order_id) => {
+        const res = await contract.methods.purchasePending(order_id).send({ from: address });
     }
 
-
-////// display functions. 
-    const ProfileDisplay = () => {
-        return (
-            <Profile 
-                isConnected = {isConnected}
-                address = {address} 
-                networkType = {network} 
-                balance = {balance}
-            />
-        )
+    const cancelPurchase = async (order_id) => {
+        const res = await contract.methods.purchaseCancel(order_id).send({ from: address });
     }
 
-    const StorageDisplay = () => {
-        return (
-            <Storage 
-                isConnected = {isConnected}
-                storeValHandle = {storedValUpdate} 
-                showValHandle = {showValUpdate} 
-                showVal = {showVal} 
-                storedPending = {storedPending}
-                storedDone = {storedDone}
-            />
-        )
+    const confirmPurchase = async (order_id) => {
+        const res = await contract.methods.purchaseDone(order_id).send({ from: address });
     }
-
-    const HistoryDisplay = () => {
-        return (
-            <History 
-                isConnected = {isConnected}
-                recordList = {historyRecord}
-                recordLen = {recordLen}
-            />
-        )
-    }
-
 
     return (
-        // <BrowserRouter>
-            <div className="App">
-                <Routes>
-                    <Route path = "/web3_app_testing" element = {<Login isHaveMetamask = {haveMetamask} connectTo = {connectWallet} />}></Route>
-                    <Route path = "/web3_app_testing/profile" element = {<ProfileDisplay/>}></Route>
-                    <Route path = "/web3_app_testing/storage" element = {<StorageDisplay/>}></Route>
-                    <Route path = "/web3_app_testing/history" element = {<HistoryDisplay/>}></Route>
-                </Routes>
-            </div>
-        // </BrowserRouter>
+        <HashRouter>
+            {/* https://beta.reactjs.org/learn/sharing-state-between-components */}
+            {NavigationBar(cart_count, address, connectWallet)}
+            <Routes>
+                <Route path="" element={<Home />} />
+                <Route path="/page2_songs" element={Page2_songs(pushItem, setSearchedDish, searchedDish)} />
+                <Route path="/page3_wishlist" element={Page3_wishlist(items, cart_count, popItem, pushItem)} />
+                <Route path="/page4_record" element={<Page4_record onCancel={registerAudience} updateOrderStatus={updateOrderStatus} currentOrders={currentOrders} pendingOrders={pendingOrders} pastOrders={pastOrders} acceptPurchase={acceptPurchase} cancelPurchase={cancelPurchase} confirmPurchase={confirmPurchase} />} />
+                <Route path="/checkout" element={<Checkout address={address} connectWallet={connectWallet} cart_items={items} onSubmit={checkoutList} setPurchaseItems = {setPurchaseItems}/>} />
+                <Route path="/credits" element={<Credits />} />
+                <Route path="*" element={<Error />} />
+            </Routes>
+        </HashRouter>
     );
+
 }
 

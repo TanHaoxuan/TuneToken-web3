@@ -1,0 +1,73 @@
+  [{
+    "id": 0,
+    "name": "Roopam Garg",
+    "dsc": "Origami",
+    "price": 0.00076,
+    "rate": 4.7,
+    "country": "Kansas City, KS",
+    "type": "R&B"
+  },
+  {
+    "id": 1,
+    "name": "Ben E. King",
+    "dsc": "Stand By Me",
+    "price": 0.00025,
+    "rate": 4.2,
+    "country": "Kinston, NC",
+    "type": "Pop"
+  },
+  {
+    "id": 2,
+    "name": "TWICE",
+    "dsc": "Cheer Up",
+    "price": 0.00052,
+    "rate": 4.3,
+    "country": "Lexington, TX",
+    "type": "Pop"
+  },
+  {
+    "id": 3,
+    "name": "The Beatles",
+    "dsc": "Hey Jude",
+    "price": 0.0004,
+    "rate": 4.2,
+    "country": "Memphis, TN",
+    "type": "Pop"
+  },
+  {
+    "id": 4,
+    "name": "Whitney Houston",
+    "dsc": "I Will Always Love You",
+    "price": 0.00032,
+    "rate": 3.5,
+    "country": "Austin, TX",
+    "type": "Pop"
+  },
+  {
+    "id": 5,
+    "name": "Michael Jackson",
+    "dsc": "Billie Jean",
+    "price": 0.00035,
+    "rate": 4.1,
+    "country": "Austin, TX",
+    "type": "R&B"
+  },
+  {
+    "id": 6,
+    "name": "Taylor Swift",
+    "dsc": "Red",
+    "price": 0.00025,
+    "rate": 4.8,
+    "country": "Austin, TX",
+    "type": "R&B"
+  },
+  {
+    "id": 7,
+    "name": "Jay Chou",
+    "dsc": "Qing Tian",
+    "price": 0.00085,
+    "rate": 4.3,
+    "country": "Taiwan",
+    "type": "R&B"
+  }
+]
