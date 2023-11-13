@@ -1,21 +1,23 @@
 {
   "files": {
     "main.css": "/web3_app_testing/static/css/main.4e3b0382.css",
-    "main.js": "/web3_app_testing/static/js/main.2a24448f.js",
+    "main.js": "/web3_app_testing/static/js/main.78eeae35.js",
     "static/media/song4.png": "/web3_app_testing/static/media/song4.3cf6ab5de3346ffadc5e.png",
     "static/media/song2.png": "/web3_app_testing/static/media/song2.3ce72f19f1cf62d49050.png",
     "static/media/song3.png": "/web3_app_testing/static/media/song3.93a6c6866f57db331c59.png",
     "static/media/song1.png": "/web3_app_testing/static/media/song1.af93ac6923641b34b7d5.png",
     "static/media/song5.png": "/web3_app_testing/static/media/song5.3fe236ee9c1673f31d53.png",
     "static/media/sky.jpg": "/web3_app_testing/static/media/sky.f5307efaec517d0380f4.jpg",
+    "static/media/song6.png": "/web3_app_testing/static/media/song6.d6748f018b4bcf940ded.png",
     "static/media/music.jpg": "/web3_app_testing/static/media/music.f55a3d059ae6f06ea26d.jpg",
+    "static/media/song7.png": "/web3_app_testing/static/media/song7.888abba836fcc08fe07f.png",
     "static/media/song0.png": "/web3_app_testing/static/media/song0.b8e07864852d7144fe7f.png",
     "index.html": "/web3_app_testing/index.html",
     "main.4e3b0382.css.map": "/web3_app_testing/static/css/main.4e3b0382.css.map",
-    "main.2a24448f.js.map": "/web3_app_testing/static/js/main.2a24448f.js.map"
+    "main.78eeae35.js.map": "/web3_app_testing/static/js/main.78eeae35.js.map"
   },
   "entrypoints": [
     "static/css/main.4e3b0382.css",
-    "static/js/main.2a24448f.js"
+    "static/js/main.78eeae35.js"
   ]
 }
