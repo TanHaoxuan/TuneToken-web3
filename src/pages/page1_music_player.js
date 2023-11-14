@@ -20,7 +20,7 @@ export default function home() {
           <button style={{ marginBottom: '10px' }}> Upload Song </button>
         </Link>
         <Link to="/page2_songs">
-          <button> Report Piracy </button>
+          <button> Report Piracy! </button>
         </Link>
       </div>
     </div>
