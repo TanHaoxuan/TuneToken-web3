@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# TuneToken Project
+
+## Project Idea 
+Our project envisions the creation of a cutting-edge music streaming platform that leverages Blockchain Technologies to ensure fair artist compensation, minimal fees, and unparalleled transparency. The integration of AI plays a pivotal role in addressing piracy and plagiarism, fostering a secure environment for artists. Successfully, we have developed our Minimum Viable Product, incorporating cryptocurrencies for music streaming sales within a user-friendly interface reminiscent of SoundCloud.
+
+Our immediate post-MVP goals include refining the user interface and functionalities based on user feedback to provide a more satisfying and tailored experience. Additionally, we plan to integrate analytics to offer valuable insights.
+
+In an ideal scenario with unlimited time, our priorities would extend to the development of advanced security measures and enhanced AI integration. These efforts are geared towards effectively combating issues related to piracy and music plagiarism, further solidifying our commitment to a secure and innovative music streaming platform.
+
+We strongly believe that our platform holds significant market potential in a world that is increasingly devoid of excessive political involvement. This applies not only to so-called "lowkey" artists but also to renowned figures who are inclined to leverage our platform for monetization. Our comprehensive business model encompasses donations, commissions, and advertising strategies.
+
+## Project Code 
+To implement the decentralized music platform, we adopted a modular and organized approach to ensure scalability, maintainability, and clarity in the codebase. The code is divided into two main components: the smart contract written in Solidity and the frontend built using React. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -8,122 +20,3 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### Import necessary package for Web3
-
-    from [https://github.com/dududududulu/InterfaceDemo/blob/main/instructions/03-React-VSCode.md?plain=1]
-
-  - Go to your app folder and install ```react-app-rewired``` and other missing modules:
-    ```
-    cd project-name
-    npm install --save-dev react-app-rewired crypto-browserify stream-browserify assert stream-http https-browserify os-browserify url buffer process
-    ```
-
-  - Create file ```config-overrides.js``` in the root of your project folder, i.e. ```project-name/config-overrides.js```. Paste the following content into the file:
-    ```javascript
-    const webpack = require("webpack");
-    module.exports = function override(config) {
-        const fallback = config.resolve.fallback || {};
-        Object.assign(fallback, {
-            crypto: require.resolve("crypto-browserify"),
-            stream: require.resolve("stream-browserify"),
-            assert: require.resolve("assert"),
-            http: require.resolve("stream-http"),
-            https: require.resolve("https-browserify"),
-            os: require.resolve("os-browserify"),
-            url: require.resolve("url"),
-        });
-        config.resolve.fallback = fallback;
-        config.plugins = (config.plugins || []).concat([
-            new webpack.ProvidePlugin({
-                process: "process/browser",
-                Buffer: ["buffer", "Buffer"],
-            }),
-        ]);
-        return config;
-    };
-    ```
-    
-  - In the file ```package.json```, change the ```scrpits``` field for start, build and test. 
-    ***before***:
-    ```
-    "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-    }
-    ```
-    ***after***:
-    ```
-    "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
-    }
-    ```
-    To this end, missing Nodejs polyfills should be included and your app should be doing well with web3. To see this, add the following command to the first line of ```project-name/src/App.js``` and re-run ```npm start``` in your project folder. You should be able to see your app running instead of errors. 
-    ```javascript
-    import Web3 from "web3";
-    ```
