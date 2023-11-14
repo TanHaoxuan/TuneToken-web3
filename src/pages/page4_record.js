@@ -73,7 +73,7 @@ function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrder
                         {/* {console.log(currentOrders[0])} */}
                         {currentOrders.map((order) =>
                             <ListItem key={order[5]} secondaryAction={
-                                <Tooltip title="Confirm delivery">
+                                <Tooltip title="Confirm purchase">
                                     <IconButton edge="end" aria-label="done" onClick={() => confirmPurchase(parseInt(order[5]))}>
                                         <DoneIcon />
                                     </IconButton>
