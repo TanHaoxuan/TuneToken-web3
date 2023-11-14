@@ -4,7 +4,6 @@ import { FaBars } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import Grid from '@mui/material/Grid';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
@@ -13,7 +12,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 export const Nav = styled.nav`
     font-size: 18px;
@@ -127,7 +125,7 @@ const NavigationBar = (cart_items, address, connectWallet) => {
                                 <HomeIcon />
                             </Grid>
                             <Grid item>
-                                Home
+                                Player
                             </Grid>
                         </Grid>
                     </NavLink>

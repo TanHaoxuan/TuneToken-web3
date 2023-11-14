@@ -59,7 +59,7 @@ function Page3_wishlist(cart_items, cart_count, onPopClick, onPushClick) {
                     </div>
                 </div>
                 :
-                <h1 style={{ color: 'white', fontFamily: 'Blippo, fantasy'}}> No items in cart! </h1>
+                <h1 style={{ color: 'white', fontFamily: 'Blippo, fantasy'}}> No Songs </h1>
             }
         </div>
     )
