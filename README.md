@@ -14,9 +14,36 @@ To implement the decentralized music platform, we adopted a modular and organize
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## How to Use the Project
 
-In the project directory, you can run:
+1. Clone the project to your local computer:
 
-### `npm start`
+```
+git clone https://github.com/TanHaoxuan/web3_app_testing
+```
 
+
+2. Install Node.js JavaScript runtime, in which npm is included.
+
+
+3. Go to project directory:
+```
+npm install --force
+```
+
+4. In the project directory, you can run locally:
+```
+npm start
+```
+
+5. In the project directory, you can deploy it:
+*(more detail in <https://github.com/dududududulu/InterfaceDemo/blob/main/instructions/04-Github.md>)*
+```
+npm run deploy
+```
+
+## Credit
+
+Front end design template: *<https://github.com/mui/material-ui/tree/v5.10.10>*
+
+Project guidelines: *<https://github.com/dududududulu/InterfaceDemo>*
