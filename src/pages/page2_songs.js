@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import songItem from "../components/songItem.js";
 import SkyImage from "../images/sky.jpg";
 
-function Page2_songs(onClick, setSearchedDish, searchedDish) {
+export default function Page2_songs(onClick, setSearchedDish, searchedDish) {
   const Item = styled(Box)(({ theme }) => ({}));
 
   const styles = {
@@ -72,4 +72,4 @@ function Page2_songs(onClick, setSearchedDish, searchedDish) {
   );
 }
 
-export default Page2_songs;
+
