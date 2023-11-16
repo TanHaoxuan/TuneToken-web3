@@ -48,7 +48,7 @@ function unqiueProducts(arr) {
     return uniqueMerchants;
 }
 
-function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrders, pastOrders, acceptPurchase, cancelPurchase, confirmPurchase, cancelPendingOrder }) {
+export default function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrders, pastOrders, acceptPurchase, cancelPurchase, confirmPurchase, cancelPendingOrder }) {
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(true);
     const typographyStyle = {
@@ -128,5 +128,3 @@ function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrder
         </div>
     );
 }
-
-export default Page4_record;

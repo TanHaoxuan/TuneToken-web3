@@ -8,7 +8,7 @@ import whishlistItem from '../components/wishlistItem';
 import Button from '@mui/material/Button';
 import BgImage from "../images/sky.jpg";
 
-function Page3_wishlist(cart_items, cart_count, onPopClick, onPushClick) {
+export default function Page3_wishlist(cart_items, cart_count, onPopClick, onPushClick) {
 
     const Item = styled(Box)(({ theme }) => ({}));
     const  styles = {
@@ -64,5 +64,3 @@ function Page3_wishlist(cart_items, cart_count, onPopClick, onPushClick) {
         </div>
     )
 }
-
-export default Page3_wishlist;
