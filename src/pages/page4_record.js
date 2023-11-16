@@ -66,7 +66,7 @@ function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrder
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                 >
-                    <Typography style={typographyStyle}>Current Purchase</Typography>
+                    <Typography style={typographyStyle}>Purchase Record</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <List dense={dense}>
@@ -101,7 +101,7 @@ function Page4_record({ onCancel, updateOrderStatus, pendingOrders, currentOrder
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                 >
-                    <Typography style={typographyStyle}>Past Purchase</Typography>
+                    <Typography style={typographyStyle}>Declined Purchase</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <List dense={dense}>
