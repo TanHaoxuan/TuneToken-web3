@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/web3_app_testing/static/css/main.4e3b0382.css",
-    "main.js": "/web3_app_testing/static/js/main.60ec4319.js",
-    "static/media/song4.png": "/web3_app_testing/static/media/song4.3cf6ab5de3346ffadc5e.png",
-    "static/media/song2.png": "/web3_app_testing/static/media/song2.3ce72f19f1cf62d49050.png",
-    "static/media/song3.png": "/web3_app_testing/static/media/song3.93a6c6866f57db331c59.png",
-    "static/media/song1.png": "/web3_app_testing/static/media/song1.af93ac6923641b34b7d5.png",
-    "static/media/song5.png": "/web3_app_testing/static/media/song5.3fe236ee9c1673f31d53.png",
-    "static/media/sky.jpg": "/web3_app_testing/static/media/sky.f5307efaec517d0380f4.jpg",
-    "static/media/music_page.png": "/web3_app_testing/static/media/music_page.bbd3a66287937870c606.png",
-    "static/media/song6.png": "/web3_app_testing/static/media/song6.d6748f018b4bcf940ded.png",
-    "static/media/song7.png": "/web3_app_testing/static/media/song7.888abba836fcc08fe07f.png",
-    "static/media/song0.png": "/web3_app_testing/static/media/song0.b8e07864852d7144fe7f.png",
-    "index.html": "/web3_app_testing/index.html",
-    "main.4e3b0382.css.map": "/web3_app_testing/static/css/main.4e3b0382.css.map",
-    "main.60ec4319.js.map": "/web3_app_testing/static/js/main.60ec4319.js.map"
+    "main.css": "/TuneToken-web3/static/css/main.4e3b0382.css",
+    "main.js": "/TuneToken-web3/static/js/main.d0e8956e.js",
+    "static/media/song4.png": "/TuneToken-web3/static/media/song4.3cf6ab5de3346ffadc5e.png",
+    "static/media/song2.png": "/TuneToken-web3/static/media/song2.3ce72f19f1cf62d49050.png",
+    "static/media/song3.png": "/TuneToken-web3/static/media/song3.93a6c6866f57db331c59.png",
+    "static/media/song1.png": "/TuneToken-web3/static/media/song1.af93ac6923641b34b7d5.png",
+    "static/media/song5.png": "/TuneToken-web3/static/media/song5.3fe236ee9c1673f31d53.png",
+    "static/media/sky.jpg": "/TuneToken-web3/static/media/sky.f5307efaec517d0380f4.jpg",
+    "static/media/music_page.png": "/TuneToken-web3/static/media/music_page.bbd3a66287937870c606.png",
+    "static/media/song6.png": "/TuneToken-web3/static/media/song6.d6748f018b4bcf940ded.png",
+    "static/media/song7.png": "/TuneToken-web3/static/media/song7.888abba836fcc08fe07f.png",
+    "static/media/song0.png": "/TuneToken-web3/static/media/song0.b8e07864852d7144fe7f.png",
+    "index.html": "/TuneToken-web3/index.html",
+    "main.4e3b0382.css.map": "/TuneToken-web3/static/css/main.4e3b0382.css.map",
+    "main.d0e8956e.js.map": "/TuneToken-web3/static/js/main.d0e8956e.js.map"
   },
   "entrypoints": [
     "static/css/main.4e3b0382.css",
-    "static/js/main.60ec4319.js"
+    "static/js/main.d0e8956e.js"
   ]
 }
